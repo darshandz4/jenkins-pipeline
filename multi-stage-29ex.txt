@@ -10,7 +10,7 @@ pipeline {
 	stages {
 			stage ('one') {
 					steps {
-							 sh "echo 'Hello all' > dev.html"
+							 sh "echo 'Hello all' > dev.html" (sh step is used to execute shell commands or scripts within a Jenkins pipeline. It allows you to run shell commands or scripts as part of your pipeline's stages.)
 					}
 			}
 			
