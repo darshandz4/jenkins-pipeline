@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    environment {
+    DOCKER_HUB_USERNAME='niharrs29'
+	DOCKER_HUB_PASSWORD='Abcd@54321'
+	IMAGE = 'niharrs29/myapp'
+    TIMESTAMP = sh(script: 'date +%Y%m%d%H%M%S', returnStdout: true).trim()
+     TAG = "${IMAGE}:${TIMESTAMP}"
+    LATEST_TAG = "${IMAGE}:latest"
+    }
+    
+    stages {
+        stage('Check-Code') {
+            steps {
+                cleanWs()
+                // Check code from GitHub
+                git branch: 'test', url: 'https://github.com/niharrs29/testingDev.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build code here
+                echo 'hello'
+            }
+        }
+        
+         stage('Build-docker-image') {
+            steps {
+                    sh 'docker build -t ${TAG} .'
+            }
+        }
+        stage('Push-docker-hub') {
+            steps {
+                 sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
+                sh "docker push ${TAG}"
+            }
+          }
+        }
+}
+
+
